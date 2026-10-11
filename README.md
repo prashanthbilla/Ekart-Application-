@@ -195,6 +195,14 @@ Invoke-RestMethod -Method Get `
 
 ## Build and tests
 
+Run the user registration/authentication/message endpoint tests with the isolated H2 test database (no local MySQL credentials are used):
+
+```powershell
+.\mvnw.cmd "-Dtest=AuthControllerMockitoTest,AuthEndpointsIntegrationTest" test
+```
+
+These tests cover user creation, password hashing and initial cart/wallet creation, successful JWT authentication, invalid-password rejection, and the public status endpoint. Mockito-based controller tests run alongside H2-backed Spring MVC integration tests. The existing full application-context test in the default suite uses the configured database, so it still needs a reachable MySQL database and the expected schema.
+
 Build and run the backend tests with:
 
 ```powershell
