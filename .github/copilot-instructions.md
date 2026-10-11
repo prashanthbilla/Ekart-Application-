@@ -1,0 +1,1 @@
+Answer my questions directly and concisely. Don’t use tools, inspect my project, run commands, or change files unless I explicitly ask you to process or perform an action. Before making significant changes, explain what you plan to do and get my approval.
