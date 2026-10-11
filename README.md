@@ -96,15 +96,35 @@ The frontend uses an HTTP interceptor to attach the stored JWT to API requests. 
 
 ## Screenshots
 
-These are screenshots of the Angular UI. The login and signup routes are shown in their initial, blank state; other screens use backend data and require a working database and authenticated session, so they are not represented by fabricated screenshots here.
+The login and signup screenshots show the initial blank forms. The authenticated-route screenshots show the actual Angular screens with empty data fields and tables; the backend/database was not connected for this capture, so they do not contain example or fabricated account, product, cart, order, or payment data.
 
-### Login
+### Sign in and account registration
 
-![Ekart Angular login screen](docs/screenshots/login.png)
+| Login | Sign up |
+|---|---|
+| ![Ekart login screen](docs/screenshots/login.png) | ![Ekart signup screen](docs/screenshots/signup.png) |
 
-### Sign up
+### User and administration screens
 
-![Ekart Angular signup screen](docs/screenshots/signup.png)
+The admin home screen provides user search, a paginated user table, and navigation to product, cart, payment, and order functions. The user home screen presents account details and links into shopping, profile, cart, orders, and payments. The profile editor exposes the contact and address fields that can be updated.
+
+| Admin home and user list | User profile home |
+|---|---|
+| ![Admin home with searchable, paginated user list](docs/screenshots/home.png) | ![User profile home with shopping and account navigation](docs/screenshots/userhome.png) |
+
+![User profile update form](docs/screenshots/updateuser.png)
+
+### Product screens
+
+The product screen includes product search/browsing. The create and update forms cover product name, category, description, price, offer, reward points, and image selection.
+
+| Browse products | Create product |
+|---|---|
+| ![Product browsing screen](docs/screenshots/products.png) | ![Create product form](docs/screenshots/createproduct.png) |
+
+![Update product form](docs/screenshots/updateproduct.png)
+
+Cart, order, and payment screens are also implemented in the Angular app, but their useful contents depend on an authenticated session and backend data; screenshots for those data-backed views are not included.
 
 ## REST API reference
 
