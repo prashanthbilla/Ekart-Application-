@@ -203,13 +203,13 @@ Run the user registration/authentication/message endpoint tests with the isolate
 
 These tests cover user creation, password hashing and initial cart/wallet creation, successful JWT authentication, invalid-password rejection, and the public status endpoint. Mockito-based controller tests run alongside H2-backed Spring MVC integration tests. The existing full application-context test in the default suite uses the configured database, so it still needs a reachable MySQL database and the expected schema.
 
-Build and run the backend tests with:
+JaCoCo is configured to collect coverage during tests and generate an HTML report during `verify`. Run the full test suite and report generation with:
 
 ```powershell
-.\mvnw.cmd clean install
+.\mvnw.cmd clean verify
 ```
 
-The application-context test requires a reachable MySQL database with the expected schema. Build the Angular app with `npm run build` from `frontend/`.
+Open `target/site/jacoco/index.html` in a browser to inspect line, branch, and class coverage. Coverage is informational; the build does not currently enforce a minimum percentage. Build the Angular app with `npm run build` from `frontend/`.
 
 ## Notes
 
