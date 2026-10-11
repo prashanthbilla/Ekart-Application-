@@ -1,0 +1,172 @@
+<div class="layout-wrapper">
+  <!-- Header -->
+  <header class="global-header">
+    <div class="header-left">
+      <h1>🛒 Ekart Application</h1>
+    </div>
+    <div class="header-right">
+      <button class="logout-button" (click)="logout()">Logout</button>
+    </div>
+  </header>
+
+  <!-- User Identity Bar -->
+ <!-- User Identity Bar (Clean look, left-aligned buttons, large avatar) -->
+<!-- User Identity Bar (Right-aligned buttons, no extra right gap, large avatar) -->
+<!-- User Identity Bar (No background, right-aligned buttons) -->
+<div class="user-identity-bar" style="display: flex; align-items: center; justify-content: space-between; padding: 16px; flex-wrap: wrap; background: none;">
+
+  <!-- User Info Section -->
+  <!-- User Identity Bar -->
+<div class="user-identity-bar">
+  <img 
+    [src]="'assets/profilepics/' + user.userName + '.jpeg'" 
+    alt="User" 
+    class="user-avatar"
+    (click)="showImagePreview()" 
+    style="cursor: pointer;"
+  />
+  <div class="user-details">
+    <p class="username">{{ user.userName }}</p>
+    <p class="fullname">{{ user.role }}</p>
+    <p class="fullname">{{ user.fullName }}</p>
+  </div>
+</div>
+
+<!-- Image Modal -->
+<div *ngIf="showModal" class="image-modal" (click)="closeImagePreview()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <img 
+      [src]="'assets/profilepics/' + user.userName + '.jpeg'" 
+      alt="User Full Image" 
+      class="full-image"
+    />
+    <button class="close-btn" (click)="closeImagePreview()">✖</button>
+  </div>
+</div>
+
+
+  <!-- Action Buttons -->
+  <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+    <button class="action-btn" (click)="myProfile()">🙍‍♂️ My Profile</button>
+    <button class="action-btn" *ngIf="isAdmin" (click)="goToAdminPage()">🛍️ ALL USERS</button>
+    <button class="action-btn" *ngIf="isAdmin" (click)="addNewProduct()">➕ Create Product</button>
+    <button class="action-btn" (click)="gotoKart()">🛒 Go to Kart</button>
+    <button class="action-btn" (click)="goToPayment()">💳 Payment Info</button>
+    <button class="action-btn" (click)="viewOrderHistory()">📦 Order History</button>
+  </div>
+
+</div>
+
+
+
+
+  <!-- Action Buttons -->
+
+
+  <!-- User & Wallet Info -->
+  <div class="user-wallet-container">
+    <div class="user-info">
+      <h3>👤 User Information</h3>
+      <div class="user-box">
+        <p><strong>Name:</strong> <span class="highlighted-name">{{ user.fullName }}</span></p>
+        <p><strong>Email:</strong> {{ user.emailId }}</p>
+        <p><strong>Location:</strong> {{ user.city }}</p>
+        <p><strong>Mobile:</strong> {{ user.mobileNum }}</p>
+        <p><strong>Address:</strong> {{ user.houseNo }}, {{ user.landmark }}, {{ user.city }} - {{ user.pincode }}</p>
+      </div>
+    </div>
+
+    <div class="wallet-box" *ngIf="walletInfo">
+      <h2 class="wallet-heading">💰 Wallet Details</h2>
+      <p><strong>Available Balance:</strong></p>
+      <p class="wallet-balance">₹{{ walletInfo.avlBal }}</p>
+      <p><strong>Last Transaction:</strong> ₹{{ walletInfo.lastTransaction }}</p>
+      <p><strong>Reward Points Used:</strong> {{ walletInfo.usageRewardPoints }}</p>
+      <button class="add-money-btn" (click)="addMoney()">➕ Add Money</button>
+    </div>
+  </div>
+
+  <!-- Product Section -->
+  <main class="product-section">
+    <h2 class="section-title">🛍️ Explore Products</h2>
+
+    <!-- Search Bar -->
+    <div style="margin-bottom: 20px;">
+      <input type="text" placeholder="🔍 Search products..." [(ngModel)]="searchText"
+        style="padding: 10px; border-radius: 8px; width: 60%; border: 1px solid #ccc;" />
+    </div>
+
+    <!-- USER ROLE: Card View -->
+    <div *ngIf="!isAdmin" class="product-list">
+      <div class="product-card" *ngFor="let product of filteredProducts()">
+        <img [src]="product.productImageUrl" (click)="showProductDetails(product)" alt="{{ product.productName }}"
+          class="product-image" />
+        <h3 class="product-name">{{ product.productName }}</h3>
+        <p class="category-id"><strong>Category:</strong> {{ product.categoryId }}</p>
+        <p class="product-details">{{ product.productDetails }}</p>
+
+        <div class="price-info">
+          <span class="original-price">₹{{ product.actualPrice }}</span>
+          <span class="discount-price">
+            ₹{{ (product.actualPrice - (product.actualPrice * product.offerPercentage / 100)).toFixed(2) }}
+          </span>
+        </div>
+
+        <p class="reward-points">🎁 {{ product.usageRewardPoints }} Reward Points</p>
+
+        <div class="product-buttons">
+          <button class="buy-btn" (click)="gotoKart()">Buy Now</button>
+          <button class="cart-btn" (click)="addToKart(product.productId)">🛒 Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN ROLE: Table View -->
+    <div *ngIf="isAdmin" style="overflow-x: auto;">
+      <table style="min-width: 1000px; width: 100%; border-collapse: collapse;">
+       <thead style="background-color: #5b2d89; color: white;">
+  <tr>
+    <th style="padding: 10px; border: 1px solid #ccc;">Image</th>
+    <th (click)="sortProducts('productName')">Product Name ⬍</th>
+    <th (click)="sortProducts('productDetails')">Product Details ⬍</th>
+    <th (click)="sortProducts('categoryId')">Category ⬍</th>
+    <th (click)="sortProducts('actualPrice')">Price ⬍</th>
+    <th (click)="sortProducts('usageRewardPoints')">Reward ⬍</th>
+    <th >Actions</th>
+  </tr>
+</thead>
+
+        <tbody>
+  <tr *ngFor="let product of filteredProducts()" style="text-align: center;">
+    <td style="padding: 8px; border: 1px solid #ccc;">
+      <img [src]="product.productImageUrl" width="60" height="60" />
+    </td>
+    <td style="padding: 8px; border: 1px solid #ccc;">{{ product.productName }}</td>
+    <td style="padding: 8px; border: 1px solid #ccc;">{{ product.productDetails }}</td>
+    <td style="padding: 8px; border: 1px solid #ccc;">{{ product.categoryId }}</td>
+    <td style="padding: 8px; border: 1px solid #ccc;">
+      ₹{{ (product.actualPrice - (product.actualPrice * product.offerPercentage / 100)).toFixed(2) }}
+    </td>
+    <td style="padding: 8px; border: 1px solid #ccc;">{{ product.usageRewardPoints }}</td>
+
+    <!-- ✅ Moved Action Buttons here -->
+    <td style="padding: 8px; border: 1px solid #ccc;">
+      <div style="display: flex; justify-content: center; gap: 6px; flex-wrap: wrap;">
+        <button class="buy-btn" title="Buy Now" (click)="gotoKart()">🛍️</button>
+        <button class="cart-btn" title="Add to Cart" (click)="addToKart(product.productId)">🛒</button>
+        <button class="update-btn" title="Update Product" (click)="onUpdateProduct(product)">✏️</button>
+        <button class="delete-btn" title="Delete Product" (click)="onDeleteProduct(product.productId)">🗑️</button>
+      </div>
+    </td>
+  </tr>
+</tbody>
+
+      </table>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="global-footer">
+    <p>© 2026 Ekart — All rights reserved.</p>
+  </footer>
+</div>

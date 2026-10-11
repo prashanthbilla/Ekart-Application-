@@ -1,0 +1,71 @@
+<div class="ekart-container">
+    <!-- Header -->
+    <header class="global-header">
+    <div class="header-left">
+      <h1>🛒 Ekart Application</h1>
+    </div>
+    <div class="header-right">
+      <button class="logout-button" (click)="logout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="section-heading">
+  <h2>💳 Payment Details</h2>
+</div>
+
+
+    <!-- Search -->
+    <div class="search-bar-wrapper">
+        <input type="text" [(ngModel)]="searchTerm" placeholder="🔍 Search Payments..." />
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Payment ID</th>
+                    <th>Transaction ID</th>
+                    <th>Order ID</th>
+                    <th>User</th>
+                    <th>Total</th>
+                    <th>Discount</th>
+                    <th>Paid</th>
+                    <th>Status</th>
+                    <th>Mode</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let p of filteredPayments().slice((currentPage-1)*pageSize, currentPage*pageSize)">
+                    <td>{{ p.paymentId }}</td>
+                    <td>{{ p.transactionId }}</td>
+                    <td>{{ p.orderId }}</td>
+                    <td>{{ p.userFullName }}</td>
+                    <td>₹{{ p.totalPrice }}</td>
+                    <td>₹{{ p.discountPrice }}</td>
+                    <td>₹{{ p.paidAmount }}</td>
+                    <td>
+                        <span [ngClass]="{ 'status-success': p.paymentStatus === 'SUCCESS' }">
+                            {{ p.paymentStatus }}
+                        </span>
+                    </td>
+                    <td>{{ p.paymentMode }}</td>
+                    <td>{{ p.paymentDate }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        <button (click)="prevPage()" [disabled]="currentPage === 1">⬅️ Prev</button>
+        <span>Page {{ currentPage }} of {{ totalPages() }}</span>
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages()">Next ➡️</button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="global-footer">
+        <p>© 2026 Ekart — All rights reserved.</p>
+    </footer>
+</div>

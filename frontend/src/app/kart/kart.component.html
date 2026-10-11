@@ -1,0 +1,119 @@
+<div class="layout-wrapper">
+  <!-- Header -->
+   <header class="global-header">
+    <div class="header-left">
+      <h1>🛒 Ekart Application</h1>
+    </div>
+    <div class="header-right">
+      <button class="logout-button" (click)="logout()">Logout</button>
+    </div>
+  </header>
+
+
+<div class="user-action-buttons-row">
+  <button class="action-btn" (click)="goToUserHome()">🏠 Home</button> <!-- ✅ New button -->
+  <button class="action-btn" (click)="goToPayments()">💳 Payments</button>
+  <button class="action-btn" (click)="goToOrders()">📦 Orders</button>
+</div>
+
+  <!-- 🛒 Kart Details Heading -->
+ <div class="section-heading">
+  <h2>🛒 Kart Details</h2>
+</div>
+
+
+  <!-- User & Wallet Section -->
+  <div class="user-wallet-container">
+    <!-- User Info -->
+    <div class="user-info">
+      <h3>👤 User</h3>
+      <div class="user-box">
+        <p><strong>Username:</strong> <span class="highlighted-name">{{ userName }}</span></p>
+        <ng-container *ngIf="kartData">
+          <p><strong>Kart ID:</strong> {{ kartData.kartId }}</p>
+          <p><strong>Products in Kart:</strong> {{ kartData.productCount }}</p>
+          <p><strong>Total Price:</strong> ₹{{ kartData.totalPrice }}</p>
+          <p><strong>Discount:</strong> ₹{{ kartData.discountPrice }}</p>
+          <p><strong>Total Reward Points:</strong> {{ kartData.getRewardPoints }}</p>
+          <p><strong>Pay:</strong> ₹{{ kartData.pay }}</p>
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- Wallet Info -->
+    <div class="wallet-box" *ngIf="walletInfo">
+      <h2 class="wallet-heading">💰 Wallet</h2>
+      <p><strong>Available Balance:</strong></p>
+      <p class="wallet-balance">₹{{ walletInfo.avlBal }}</p>
+      <p><strong>Last Transaction:</strong> ₹{{ walletInfo.lastTransaction }}</p>
+      <p><strong>Reward Points:</strong> {{ walletInfo.usageRewardPoints }}</p>
+      <button class="add-money-btn" (click)="addMoney()">➕ Add Money</button>
+    </div>
+  </div>
+
+  <!-- Product List Section -->
+  <main class="product-section">
+    <h2 class="section-title">🛍️ Your Products</h2>
+    <label>
+      <input type="checkbox" (change)="selectAll($event)"> Select All
+    </label>
+
+    <div class="product-list">
+      <div class="product-card" *ngFor="let product of products">
+        <img class="product-image" [src]="product.productImageUrl" alt="{{ product.productName }}">
+        <div class="product-name">{{ product.productName }}</div>
+
+        <!-- Quantity -->
+        <div class="product-quantity">
+          <strong>Quantity:</strong>
+          <button (click)="updateQuantity(product.productId, -1)">−</button>
+          <span class="quantity-number">{{ product.quantity }}</span>
+          <button (click)="updateQuantity(product.productId, 1)">+</button>
+        </div>
+
+        <p class="reward-points">
+          🎁 {{ product.usageRewardPoints }} × {{ kartData.products[product.productId] || 1 }} =
+          {{ product.usageRewardPoints * (kartData.products[product.productId] || 1) }} Points
+        </p>
+
+        <div class="price-info">
+          <span class="original-price">₹{{ product.actualPrice }}</span>
+          <span class="discount-price">
+            ₹{{ product.actualPrice - (product.actualPrice * product.offerPercentage / 100) }}
+          </span>
+        </div>
+
+        <input type="checkbox" (change)="toggleProductSelection(product.productId, $event.target.checked)">
+      </div>
+    </div>
+
+    <!-- Selected Summary -->
+<div *ngIf="selectedProductIds.size > 0" class="summary-card">
+  <h3 class="summary-title">🧾 Selected Order Summary</h3>
+
+  <div class="summary-item"><span>User:</span> {{ userName }}</div>
+  <div class="summary-item"><span>Selected Products:</span> {{ selectedProductIds.size }}</div>
+  <div class="summary-item"><span>Total Original Price:</span> ₹{{ totalOriginalPrice }}</div>
+  <div class="summary-item"><span>Total Discounted Price:</span> ₹{{ totalDiscountPrice.toFixed(2) }}</div>
+  <div class="summary-item savings"><span>You Save:</span> ₹{{ (totalOriginalPrice - totalDiscountPrice).toFixed(2) }}</div>
+
+  <div class="payment-mode-wrapper">
+    <label for="payment">💳 Payment Mode:</label>
+    <select [(ngModel)]="paymentMode" id="payment" class="payment-dropdown">
+      <option value="WALLET">WALLET</option>
+      <option value="paytm">PAYTM</option>
+      <option value="upi">UPI</option>
+      <option value="netbanking">NETBANKING</option>
+    </select>
+  </div>
+
+  <button (click)="placeOrder()" class="place-order-btn">✅ Place Order</button>
+</div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="global-footer">
+    © 2026 Ekart — All rights reserved.
+  </footer>
+</div>

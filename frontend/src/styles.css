@@ -1,0 +1,73 @@
+/* Page Background */
+.ekart-container {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to right, rgba(155, 89, 182, 0.1), rgba(52, 152, 219, 0.1));
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.ekart-header {
+  background-color: rgba(142, 68, 173, 0.8);
+  padding: 20px;
+  text-align: center;
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Content */
+.ekart-content {
+  flex: 1;
+  padding: 30px 10%;
+}
+
+/* Table Styling */
+.user-table-container {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-table th, .user-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.user-table th {
+  background-color: #a29bfe;
+  color: white;
+  font-weight: 600;
+}
+
+.user-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.no-user-msg {
+  text-align: center;
+  font-style: italic;
+  color: #666;
+}
+
+/* Footer */
+.ekart-footer {
+  background-color: rgba(142, 68, 173, 0.8);
+  color: white;
+  text-align: center;
+  padding: 15px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+

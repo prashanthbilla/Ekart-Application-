@@ -1,0 +1,93 @@
+<header class="global-header">
+    <div class="header-left">
+      <h1>🛒 Ekart Application</h1>
+    </div>
+  </header>
+
+<div class="signup-container">
+  <h2>📝 Create Your Account</h2>
+
+  <!-- Image Preview -->
+  <div class="profile-picture-wrapper" *ngIf="previewUrl">
+    <img class="profile-picture" [src]="previewUrl" alt="Selected Profile Picture" />
+  </div>
+
+  <!-- File Upload -->
+  <div class="form-group">
+    <label for="profileImage">Profile Picture</label>
+    <input type="file" id="profileImage" (change)="onFileSelected($event)" accept="image/*" />
+  </div>
+
+  <form #signupForm="ngForm" (ngSubmit)="onSubmit()">
+    <!-- First + Last Name -->
+    <div class="form-group">
+      <label for="firstName">First Name</label>
+      <input id="firstName" name="firstName" [(ngModel)]="user.firstName" required />
+    </div>
+
+    <div class="form-group">
+      <label for="lastName">Last Name</label>
+      <input id="lastName" name="lastName" [(ngModel)]="user.lastName" required />
+    </div>
+
+    <div class="form-group">
+      <label for="userName">Username</label>
+      <input id="userName" name="userName" [(ngModel)]="user.userName" required />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" [(ngModel)]="user.password" required />
+    </div>
+
+    <div class="form-group">
+      <label for="emailId">Email</label>
+      <input id="emailId" name="emailId" type="email" [(ngModel)]="user.emailId" required />
+    </div>
+
+    <div class="form-group">
+      <label for="mobileNum">Mobile</label>
+      <input id="mobileNum" name="mobileNum" [(ngModel)]="user.mobileNum" required />
+    </div>
+
+    <div class="form-group">
+      <label for="houseNo">House No</label>
+      <input id="houseNo" name="houseNo" [(ngModel)]="user.houseNo" required />
+    </div>
+
+    <div class="form-group">
+      <label for="landmark">Landmark</label>
+      <input id="landmark" name="landmark" [(ngModel)]="user.landmark" required />
+    </div>
+
+    <div class="form-group">
+      <label for="city">City</label>
+      <input id="city" name="city" [(ngModel)]="user.city" required />
+    </div>
+
+    <div class="form-group">
+      <label for="pincode">Pincode</label>
+      <input id="pincode" name="pincode" [(ngModel)]="user.pincode" required />
+    </div>
+
+    <!-- Role dropdown -->
+    <div class="form-group">
+      <label for="role">Select Role</label>
+      <select id="role" name="role" [(ngModel)]="user.role" required>
+        <option value="" disabled selected>Select Role</option>
+        <option value="ROLE_USER">User</option>
+        <option value="ROLE_ADMIN">Admin</option>
+      </select>
+    </div>
+
+    <button type="submit" [disabled]="!signupForm.valid" class="signup-button">
+      Create Account
+    </button>
+
+    <div class="error" *ngIf="error">{{ error }}</div>
+  </form>
+</div>
+
+<footer class="global-footer">
+  <p>© 2025 Ekart — All rights reserved.</p>
+</footer>

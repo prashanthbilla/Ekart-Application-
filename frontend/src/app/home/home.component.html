@@ -1,0 +1,113 @@
+<div class="ekart-container">
+  <!-- Header -->
+ <header class="global-header">
+    <div class="header-left">
+      <h1>🛒 Ekart Application</h1>
+    </div>
+    <div class="header-right">
+      <button class="logout-button" (click)="logout()">Logout</button>
+    </div>
+  </header>
+
+  <!-- Action Buttons Below Header -->
+  <div class="action-button-bar">
+    <button class="action-btn" (click)="goToProducts()">🏠 Home</button>
+    <button class="action-btn" (click)="addNewProduct()">➕ Create Product</button>
+    <button class="action-btn" (click)="goToPayment()">💳 Payments</button>
+    <button class="action-btn" (click)="gotoKart()">🛒 Go to Kart</button>
+    <button class="action-btn" (click)="viewOrderHistory()">📦 Order History</button>
+  </div>
+
+  <!-- Main Content -->
+  <main class="ekart-content">
+    <!-- Stylish Search -->
+    <div class="search-bar-container">
+      <mat-form-field appearance="outline" class="search-box custom-search">
+        <mat-label>🔍 Search Users</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Type name, city, etc.">
+      </mat-form-field>
+    </div>
+
+    <!-- User Table -->
+    <div class="mat-elevation-z4 user-table-container">
+      <table mat-table [dataSource]="dataSource" matSort class="mat-table">
+
+        <!-- Full Name -->
+        <ng-container matColumnDef="fullName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Full Name</th>
+          <td mat-cell *matCellDef="let user">
+            <div class="user-avatar-info">
+              <img class="user-avatar"
+                   [src]="'assets/profilepics/' + user.userName + '.jpeg'"
+                   (error)="userAvatarFallback($event)"
+                   alt="profile" />
+              <span>{{ user.fullName }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Username -->
+        <ng-container matColumnDef="userName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Username</th>
+          <td mat-cell *matCellDef="let user">{{ user.userName }}</td>
+        </ng-container>
+
+        <!-- Email -->
+        <ng-container matColumnDef="emailId">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+          <td mat-cell *matCellDef="let user">{{ user.emailId }}</td>
+        </ng-container>
+
+        <!-- Mobile -->
+        <ng-container matColumnDef="mobileNum">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Mobile</th>
+          <td mat-cell *matCellDef="let user">{{ user.mobileNum }}</td>
+        </ng-container>
+
+        <!-- City -->
+        <ng-container matColumnDef="city">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>City</th>
+          <td mat-cell *matCellDef="let user">{{ user.city }}</td>
+        </ng-container>
+
+        <!-- Role -->
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Role</th>
+          <td mat-cell *matCellDef="let user">
+            <span class="role-badge" [ngClass]="{
+              'admin-badge': user.role === 'ROLE_ADMIN',
+              'user-badge': user.role === 'ROLE_USER'
+            }">
+              {{ user.role === 'ROLE_ADMIN' ? 'Admin' : 'User' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Actions -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let user">
+            <button mat-button color="primary" (click)="onEdit(user)">✏️ Edit</button>
+            <button class="delete-button" (click)="onDelete(user)">🗑️ Delete</button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <!-- Stylish Pagination -->
+      <mat-paginator
+        [pageSize]="5"
+        [pageSizeOptions]="[5, 10, 20]"
+        showFirstLastButtons
+        class="custom-paginator">
+      </mat-paginator>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="global-footer">
+    <p>© 2026 Ekart — All rights reserved.</p>
+  </footer>
+</div>

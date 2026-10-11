@@ -1,0 +1,166 @@
+.update-product-container {
+  max-width: 600px;
+  margin: 40px auto;
+  background-color: #fdf6ec;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.update-product-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #5b2d89;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #333;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background-color: #fff;
+}
+
+.update-btn {
+  display: block;
+  width: 100%;
+  background-color: #5b2d89;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s;
+}
+
+.update-btn:hover {
+  background-color: #4a1c7f;
+}
+
+img {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-top: 6px;
+}
+
+/* Header */
+.global-header {
+  background-color: #5b2d89;
+  color: white;
+  padding: 16px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logout-button {
+  background-color: white;
+  color: #5b2d89;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* === Global Header === */
+.global-header {
+  background-color: #5b2d89; /* Restored original color */
+  color: white;
+  padding: 22px 42px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  box-shadow: 0 6px 20px rgba(91, 45, 137, 0.5);
+  animation: headerPulse 6s ease-in-out infinite;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.global-header h1 {
+  margin: 0;
+  font-size: 48px;
+  font-weight: bold;
+  background: linear-gradient(120deg, #ffffff, #ffe600, #ffffff);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+  animation: shineText 4s linear infinite;
+}
+
+.logout-button {
+  background-color: #ffffff;
+  color: #5b2d89;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: #e0cfff;
+  transform: scale(1.05);
+  box-shadow: 0 4px 18px rgba(170, 140, 255, 0.5);
+}
+
+/* === Global Footer === */
+.global-footer {
+  background-color: #5b2d89; /* Restored original color */
+  padding: 18px;
+  text-align: center;
+  color: white;
+  font-weight: 500;
+  font-size: 16px;
+  box-shadow: 0 -4px 20px rgba(91, 45, 137, 0.5);
+  animation: footerPulse 6s ease-in-out infinite;
+  border-top: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+/* === Animations === */
+@keyframes shineText {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes headerPulse {
+  0%, 100% {
+    box-shadow: 0 6px 20px rgba(91, 45, 137, 0.5);
+  }
+  50% {
+    box-shadow: 0 8px 26px rgba(255, 255, 255, 0.2);
+  }
+}
+
+@keyframes footerPulse {
+  0%, 100% {
+    box-shadow: 0 -4px 20px rgba(91, 45, 137, 0.4);
+  }
+  50% {
+    box-shadow: 0 -6px 24px rgba(255, 255, 255, 0.25);
+  }
+}

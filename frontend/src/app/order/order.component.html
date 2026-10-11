@@ -1,0 +1,91 @@
+<div class="order-history-container">
+  <!-- Global Header -->
+ <header class="global-header">
+    <div class="header-left">
+      <h1>🛒 Ekart Application</h1>
+    </div>
+    <div class="header-right">
+      <button class="logout-button" (click)="logout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="section-heading">
+  <h2>📦 Order Details</h2>
+</div>
+
+  <!-- Search Input -->
+  <div class="search-bar">
+    <input type="text" placeholder="🔍 Search by Order ID, Name, or Status..." [(ngModel)]="searchTerm" />
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrapper">
+    <table class="order-table">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>User ID</th>
+          <th>Full Name</th>
+          <th>Product Count</th>
+          <th>Total Price</th>
+          <th>Discount</th>
+          <th>Pay</th>
+          <th>Payment Status</th>
+          <th>Transaction ID</th>
+          <th>Order Date</th>
+          <th>Mobile</th>
+          <th>Address</th>
+           <th>Delivery Date</th>
+          <th>Order Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of filteredOrders() | slice:(currentPage-1)*pageSize:(currentPage)*pageSize">
+          <td>{{ order.orderId }}</td>
+          <td>{{ order.userId }}</td>
+          <td>{{ order.userFullName }}</td>
+          <td>{{ order.productCount }}</td>
+          <td>₹{{ order.totalPrice }}</td>
+          <td>₹{{ order.discountPrice }}</td>
+          <td>₹{{ order.pay }}</td>
+          <td>
+            <span [ngClass]="{
+              'payment-success': order.paymentStatus === 'SUCCESS',
+              'payment-failed': order.paymentStatus === 'FAILED',
+              'payment-pending': order.paymentStatus === 'PENDING'
+            }">{{ order.paymentStatus }}</span>
+          </td>
+          <td>{{ order.transactionId }}</td>
+          <td>{{ order.orderDate }}</td>
+          <td>{{ order.userAddress?.mobileNo }}</td>
+          <td>
+            {{ order.userAddress?.houseNo }},
+            {{ order.userAddress?.landmark }},
+            {{ order.userAddress?.city }} - {{ order.userAddress?.pincode }}
+          </td>
+           <td>{{ order.deliveryDate }}</td>
+          <td>
+             <span [ngClass]="{
+              'order-ordered': order.orderStatus === 'ORDERED',
+              'order-dispached' : order.orderStatus === 'DISPATCHED',
+              'order-waiting' : order.orderStatus === 'WAITING_FOR_DELIVERY',
+              'order-delivered': order.orderStatus === 'DELIVERED',
+            }">{{ order.orderStatus }}</span>
+            </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">⏪ Prev</button>
+    <span>Page {{ currentPage }} of {{ totalPages() }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages()">Next ⏩</button>
+  </div>
+
+  <!-- Footer -->
+  <footer class="global-footer">
+    <p>© 2026 Ekart — All rights reserved.</p>
+  </footer>
+</div>

@@ -1,0 +1,69 @@
+<div>
+  <!-- Header -->
+ <header class="global-header">
+    <div class="header-left">
+      <h1>🛒 Ekart Application</h1>
+    </div>
+    <div class="header-right">
+      <button class="logout-button" (click)="logout()">Logout</button>
+    </div>
+  </header>
+
+  <!-- Below Header: List Products Button -->
+
+  <div class="action-button-bar">
+  <button class="action-btn" (click)="goToProducts()">🏠 Home </button>
+<button class="action-btn" *ngIf="isAdmin" (click)="goToAdminPage()">🛍️ ALL USERS</button>
+  <button class="action-btn" (click)="goToKart()">🛒 Go to Kart</button>
+  <button class="action-btn" (click)="goToOrders()">📦 Orders</button>
+  <button class="action-btn" (click)="goToPayments()">💳 Payments</button>
+  
+</div>
+
+
+  <!-- Profile Card -->
+  <section class="profile-card">
+    <h2>User Profile</h2>
+
+    <!-- Profile Picture Section -->
+    <div class="profile-picture-wrapper">
+      <img class="profile-picture" [src]="'assets/profilepics/' + user.userName + '.jpeg'"
+        (error)="profileFallback($event)" alt="Profile Picture" (click)="showImagePreview()" 
+    style="cursor: pointer;" />
+    </div>
+
+    <div *ngIf="showModal" class="image-modal" (click)="closeImagePreview()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <img 
+      [src]="'assets/profilepics/' + user.userName + '.jpeg'" 
+      alt="User Full Image" 
+      class="full-image"
+    />
+    <button class="close-btn" (click)="closeImagePreview()">✖</button>
+  </div>
+</div>
+
+    <div class="info-field"><label>ID:</label> <span>{{ user.id }}</span></div>
+    <div class="info-field"><label>Name:</label> <span>{{ user.fullName }}</span></div>
+    <div class="info-field"><label>Username:</label> <span>{{ user.userName }}</span></div>
+    <div class="info-field"><label>Email:</label> <span>{{ user.emailId }}</span></div>
+    <div class="info-field"><label>Mobile:</label> <span>{{ user.mobileNum }}</span></div>
+    <div class="info-field"><label>Password:</label> <span>{{ user.Password }}</span></div>
+    <div class="info-field"><label>Role:</label> <span>{{ user.role }}</span></div>
+    <div class="info-field"><label>City:</label> <span>{{ user.city }}</span></div>
+    <div class="info-field"><label>Pincode:</label> <span>{{ user.pincode }}</span></div>
+    <div class="info-field"><label>Created:</label> <span>{{ user.createdDate }}</span></div>
+    <div class="info-field"><label>Updated:</label> <span>{{ user.updatedDate }}</span></div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button class="update-btn" (click)="onEdit(user)">✏️ Update</button>
+      <button class="delete-btn" (click)="onDelete(user)">🗑️ Delete</button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="global-footer">
+    <p>© 2026 Ekart — All rights reserved.</p>
+  </footer>
+</div>

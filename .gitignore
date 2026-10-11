@@ -2,6 +2,10 @@ HELP.md
 target/
 uploads/
 src/main/resources/application-local.properties
+node_modules/
+.angular/
+dist/
+frontend/.env*
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/

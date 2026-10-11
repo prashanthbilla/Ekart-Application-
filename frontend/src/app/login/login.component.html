@@ -1,0 +1,141 @@
+<div class="ekart-container">
+
+  <!-- Header -->
+  <header class="global-header">
+    <div class="header-left">
+      <h1>🛒 Ekart Application</h1>
+    </div>
+  </header>
+
+  <!-- Main Login Page -->
+  <main class="login-page">
+
+    <!-- Left Side: Application Information -->
+    <section class="about-section">
+
+      <div class="about-content">
+        <div class="welcome-badge">
+          ✨ Welcome to Ekart
+        </div>
+
+        <h1>
+          Everything You Need,
+          <span>All in One Place.</span>
+        </h1>
+
+        <p class="about-description">
+          Welcome to Ekart, your convenient shopping platform.
+          Explore products, manage your cart, make payments,
+          and keep track of your orders from one place.
+        </p>
+
+        <!-- Application Features -->
+        <div class="features-list">
+
+          <div class="feature-item">
+            <div class="feature-icon">🛍️</div>
+            <div class="feature-text">
+              <h3>Explore Products</h3>
+              <p>Browse products and discover what you need.</p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon">🛒</div>
+            <div class="feature-text">
+              <h3>Manage Your Cart</h3>
+              <p>Keep your selected products organized.</p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon">📦</div>
+            <div class="feature-text">
+              <h3>Track Your Orders</h3>
+              <p>Access your order history conveniently.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="about-bottom">
+          <span class="bottom-icon">✓</span>
+          Simple. Convenient. Ekart.
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Right Side: Existing Login Form -->
+    <section class="login-section">
+
+      <div class="login-box">
+
+        <div class="login-icon">🔐</div>
+
+        <h2>Welcome</h2>
+
+        <p class="login-subtitle">
+          Sign in to continue to your Ekart account.
+        </p>
+
+        <form (ngSubmit)="login()" #loginForm="ngForm">
+
+          <div class="form-group">
+            <label for="username">Username</label>
+
+            <input
+              type="text"
+              id="username"
+              name="username"
+              [(ngModel)]="username"
+              placeholder="Enter your username"
+              autocomplete="username"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+
+            <input
+              type="password"
+              id="password"
+              name="password"
+              [(ngModel)]="password"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              required
+            />
+          </div>
+
+          <button
+            class="login-btn"
+            type="submit"
+            [disabled]="!loginForm.valid">
+            Login to Ekart →
+          </button>
+
+        </form>
+
+        <div class="login-divider">
+          <span>NEW TO EKART?</span>
+        </div>
+
+        <p class="signup-text">
+          Don't have an account?
+          <a (click)="goToSignup()">Sign up here</a>
+        </p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="global-footer">
+    <p>© 2026 Ekart — All rights reserved.</p>
+  </footer>
+
+</div>

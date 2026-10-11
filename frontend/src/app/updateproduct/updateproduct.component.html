@@ -1,0 +1,69 @@
+<header class="global-header">
+    <div class="header-left">
+      <h1>🛒 Ekart Application</h1>
+    </div>
+    <div class="header-right">
+      <button class="logout-button" (click)="logout()">Logout</button>
+    </div>
+  </header>
+
+
+
+<div class="update-product-container">
+  <h2>✏️ Update Product</h2>
+
+  <form (ngSubmit)="updateProduct()">
+    <div class="form-group">
+      <label>Product ID</label>
+      <input type="text" [(ngModel)]="product.productId" name="productId" disabled />
+    </div>
+
+    <div class="form-group">
+      <label>Product Name</label>
+      <input type="text" [(ngModel)]="product.productName" name="productName" required />
+    </div>
+
+    <div class="form-group">
+      <label>Category ID</label>
+      <input type="text" [(ngModel)]="product.categoryId" name="categoryId" required />
+    </div>
+
+    <div class="form-group">
+      <label>Product Details</label>
+      <textarea [(ngModel)]="product.productDetails" name="productDetails" rows="3" required></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Actual Price</label>
+      <input type="number" [(ngModel)]="product.actualPrice" name="actualPrice" required />
+    </div>
+
+    <div class="form-group">
+      <label>Offer %</label>
+      <input type="number" [(ngModel)]="product.offerPercentage" name="offerPercentage" />
+    </div>
+
+    <div class="form-group">
+      <label>Reward Points</label>
+      <input type="number" [(ngModel)]="product.usageRewardPoints" name="usageRewardPoints" />
+    </div>
+
+  <div class="form-group">
+  <label>Choose Product Image</label>
+  <input type="file" (change)="onImagePicked($event)" accept="image/*" />
+</div>
+
+<div class="form-group" *ngIf="product.productImageUrl">
+  <label>Image Preview:</label><br />
+  <img [src]="product.productImageUrl" alt="Product Preview" style="max-width: 150px; border-radius: 8px;" />
+</div>
+
+
+    <button type="submit" class="update-btn">Update Product</button>
+    <div class="error" *ngIf="error">{{ error }}</div>
+  </form>
+</div>
+
+<footer class="global-footer">
+  <p>© 2026 Ekart — All rights reserved.</p>
+</footer>

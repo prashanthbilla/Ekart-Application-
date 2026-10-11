@@ -114,4 +114,30 @@ Authentication request body:
 
 ## Angular frontend
 
-The Angular frontend is not included in this backend repository. Run it separately and configure it to call the backend API at `http://localhost:8080`. The backend CORS configuration allows `http://localhost:4200`.
+The Angular 17 application is in the `frontend/` directory. It uses Angular Material and calls the backend at `http://localhost:8080`. The backend CORS configuration allows the default Angular development origin, `http://localhost:4200`.
+
+### Prerequisites
+
+- Node.js 20 LTS (20.9 or later)
+- npm
+
+### Install and run
+
+From the repository root:
+
+```powershell
+cd frontend
+npm ci
+npm start
+```
+
+Open `http://localhost:4200`. Keep the Spring Boot backend and MySQL running in separate terminals. The frontend's API URL is currently configured in its authentication service.
+
+To build the frontend:
+
+```powershell
+cd frontend
+npm run build
+```
+
+`node_modules/`, Angular's `.angular/` cache, and generated `dist/` files are excluded from Git.
