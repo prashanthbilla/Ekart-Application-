@@ -1,35 +1,36 @@
 # Ekart Application
 
-Ekart is a REST API for an e-commerce application. The backend is built with Spring Boot and Java, and provides user authentication, products, carts, orders, payments, and wallet operations.
+Ekart is a full-stack e-commerce project: a Spring Boot REST API backed by MySQL and an Angular 17 web application. It supports user accounts and JWT authentication, product browsing and administration, shopping carts, checkout, order/payment lookup, and wallet operations.
 
-> This repository contains the backend. Run the Angular frontend separately.
+## Project structure
+
+```text
+.
+├── src/                 # Spring Boot backend
+├── frontend/            # Angular frontend
+└── docs/screenshots/     # Angular UI screenshots
+```
 
 ## Technology
 
-- Java 17
-- Spring Boot 3.1.12
-- Spring Web and Spring Security
-- Spring Data JDBC
-- MySQL
-- JWT authentication
+| Part | Stack |
+|---|---|
+| Backend | Java 17, Spring Boot 3.1.12, Spring Web, Spring Security, Spring Data JDBC |
+| Database | MySQL |
+| Authentication | JWT and BCrypt password hashing |
+| Frontend | Angular 17, Angular Material, TypeScript |
 
 ## Prerequisites
 
-- JDK 17
-- MySQL Server
-- The project's MySQL database and tables
+- JDK 17 and MySQL Server
+- Node.js 20 LTS (20.9 or later) and npm
+- The MySQL database and tables expected by the application
 
-The application’s default database URL points to `billa2024` on `localhost:3306`. This repository does not include database schema or migration scripts, so the required database and tables must already exist.
+The configured default database is `billa2024` on `localhost:3306`. This repository does not include database creation scripts or migrations; create the database and required tables before starting the backend.
 
-## Local configuration
+## Configure and run the backend
 
-The application uses the `local` Spring profile. Keep local credentials and secrets in:
-
-```text
-src/main/resources/application-local.properties
-```
-
-That file is excluded from Git. Set its datasource password to the password for your local MySQL account, and set a Base64-encoded JWT secret of at least 32 bytes:
+The active Spring profile is `local`. Put machine-specific values in `src/main/resources/application-local.properties`; that file is ignored by Git. For example:
 
 ```properties
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
@@ -39,7 +40,7 @@ spring.datasource.password=YOUR_LOCAL_MYSQL_PASSWORD
 app.jwt.secret=YOUR_BASE64_ENCODED_SECRET
 ```
 
-Generate a JWT secret once and keep it stable between runs. In PowerShell:
+Use a stable, Base64-encoded JWT secret containing at least 32 random bytes. Generate one in PowerShell:
 
 ```powershell
 $rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
@@ -49,81 +50,19 @@ $rng.Dispose()
 [Convert]::ToBase64String($key)
 ```
 
-Copy the printed value to `app.jwt.secret`. Do not commit or share this local configuration file.
+Do not commit or share `application-local.properties`, database passwords, or JWT secrets.
 
-## Run from IntelliJ IDEA
-
-1. Open the project and allow Maven to import dependencies.
-2. Confirm MySQL is running, the `billa2024` database and required tables exist, and the local MySQL credentials are correct.
-3. Run `Ekart2Application`.
-
-The default server port is `8080`. If that port is already in use, stop the process using it or set a different `server.port` in the local properties file.
-
-## Run from Windows PowerShell
-
-From the project root:
+From the repository root, start the backend:
 
 ```powershell
 .\mvnw.cmd spring-boot:run
 ```
 
-## Build and tests
+The API listens on `http://localhost:8080` by default. IntelliJ users can also import the Maven project and run `Ekart2Application`.
 
-```powershell
-.\mvnw.cmd clean install
-```
+## Configure and run the Angular frontend
 
-The application-context test starts Spring and needs a working database connection. If the build fails during tests, check the MySQL service, database name, and credentials.
-
-## API overview
-
-Base URL: `http://localhost:8080`
-
-| Area | Method | Endpoint | Purpose |
-|---|---|---|---|
-| Status | GET | `/auth/v1/mes` | Public status response |
-| Authentication | POST | `/auth/v1/authenticate` | Verify credentials and return a JWT |
-| Users | POST | `/user/v1/post` | Register a user |
-| Users | GET, PUT, DELETE | `/user/v1` | Retrieve, update, or delete user data |
-| Users | GET | `/user/v1/all`, `/user/v1/getRole` | List users or retrieve a role |
-| Products | GET, POST, PUT, DELETE | `/product/v1` | Retrieve or manage products |
-| Products | GET | `/product/v1/all` | List products, optionally filtered by category |
-| Cart | GET | `/kart/v1` | Retrieve cart details |
-| Cart | PUT | `/kart/v1/addproducts` | Add products to a cart |
-| Cart | DELETE | `/kart/v1/delete` | Remove a product from a cart |
-| Orders | GET | `/order/v1/getAll`, `/order/v1/getOrders`, `/order/v1/get` | Retrieve order information |
-| Payments | PUT | `/payment/v1/products`, `/payment/v1/buysomeproducts` | Purchase cart items |
-| Payments | GET | `/payment/v1/getAll`, `/payment/v1/get` | Retrieve payment information |
-| Wallet | GET | `/wallet/v1` | Check wallet balance |
-| Wallet | PUT | `/wallet/v1/addmoney` | Add funds to a wallet |
-
-Many API routes require authentication. Authenticate first, then send the returned JWT with protected requests:
-
-```http
-Authorization: Bearer YOUR_JWT_TOKEN
-```
-
-Authentication request body:
-
-```json
-{
-  "username": "YOUR_USERNAME",
-  "password": "YOUR_PASSWORD"
-}
-```
-
-## Angular frontend
-
-The Angular 17 application is in the `frontend/` directory. It uses Angular Material and calls the backend at `http://localhost:8080`. The backend CORS configuration allows the default Angular development origin, `http://localhost:4200`.
-
-### Prerequisites
-
-- Node.js 20 LTS (20.9 or later)
-- npm
-
-### Install and run
-
-From the repository root:
+Keep MySQL and the backend running, then open a second terminal:
 
 ```powershell
 cd frontend
@@ -131,13 +70,121 @@ npm ci
 npm start
 ```
 
-Open `http://localhost:4200`. Keep the Spring Boot backend and MySQL running in separate terminals. The frontend's API URL is currently configured in its authentication service.
-
-To build the frontend:
+Open `http://localhost:4200`. The frontend currently sends requests to `http://localhost:8080`; the backend CORS configuration allows the default Angular origin. Build the frontend with:
 
 ```powershell
-cd frontend
 npm run build
 ```
 
-`node_modules/`, Angular's `.angular/` cache, and generated `dist/` files are excluded from Git.
+## Angular screens and functionality
+
+| Route | Screen and functionality |
+|---|---|
+| `/login` | Sign in with a username and password; the app stores the returned JWT and can look up the user's role. |
+| `/signup` | Create an account with profile, contact, address, and role fields. |
+| `/home` | Home/dashboard screen. |
+| `/userhome` | User landing page and shopping entry point. |
+| `/updateuser` | Edit user profile information. |
+| `/products` | Browse/search products and access product actions exposed by the app. |
+| `/createproduct` | Enter product details to create a product. |
+| `/updateproduct` | Edit an existing product. |
+| `/kart` | View and manage cart items and proceed to checkout. |
+| `/order` | View and filter order records. |
+| `/payment` | View and filter payment records. |
+
+The frontend uses an HTTP interceptor to attach the stored JWT to API requests. The root route redirects to `/login`. Wallet balance and top-up are available through the backend API; there is no separate wallet route in the current Angular route configuration.
+
+## Screenshots
+
+These are screenshots of the Angular UI. The login and signup routes are shown in their initial, blank state; other screens use backend data and require a working database and authenticated session, so they are not represented by fabricated screenshots here.
+
+### Login
+
+![Ekart Angular login screen](docs/screenshots/login.png)
+
+### Sign up
+
+![Ekart Angular signup screen](docs/screenshots/signup.png)
+
+## REST API reference
+
+Base URL: `http://localhost:8080`
+
+Unless noted as public, send the JWT returned by authentication as `Authorization: Bearer <token>`. JSON endpoints accept and return JSON. Application responses generally use a `statusCode` and `data` envelope; the authentication endpoint returns a JSON object containing `token`.
+
+### Authentication and users
+
+| Method | Endpoint | Access | Parameters/body | Purpose |
+|---|---|---|---|---|
+| `GET` | `/auth/v1/mes` | Public | — | Basic API status response. |
+| `POST` | `/auth/v1/authenticate` | Public | JSON: `{"username":"…","password":"…"}` | Verify credentials and return a signed JWT. |
+| `POST` | `/user/v1/post` | Public | User JSON: `firstName`, `lastName`, `userName`, `password`, `emailId`, `mobileNum`, `houseNo`, `landmark`, `city`, `pincode`, `role` | Register a user; the backend BCrypt-encodes the submitted password. |
+| `GET` | `/user/v1?userName=…` | JWT; user or admin role | Required `userName` | Retrieve a user by username. |
+| `PUT` | `/user/v1` | JWT; user or admin role | User JSON | Update a user record. |
+| `GET` | `/user/v1/all` | JWT; user or admin role | — | List user records. |
+| `GET` | `/user/v1/getRole?userName=…` | JWT; user or admin role | Username query parameter | Look up a user's role. |
+| `DELETE` | `/user/v1?userId=…` | JWT; user or admin role | Required `userId` | Delete a user record. |
+
+### Products and cart
+
+| Method | Endpoint | Access | Parameters/body | Purpose |
+|---|---|---|---|---|
+| `POST` | `/product/v1` | JWT; user or admin role | Product JSON: `productId`, `productName`, `categoryId`, `productImageUrl`, `productDetails`, `actualPrice`, `offerPercentage`, `usageRewardPoints` | Create a product. |
+| `GET` | `/product/v1?productId=…` | JWT; user or admin role | Required `productId` | Retrieve one product. |
+| `PUT` | `/product/v1` | JWT; admin role | Product JSON | Update a product. |
+| `DELETE` | `/product/v1?productId=…` | JWT; admin role | Required `productId` | Delete a product. |
+| `GET` | `/product/v1/all?mode=NONE` | JWT; user or admin role | Required `mode`; `categoryId` optional | List products. Use `mode=CATEGORY_ID&categoryId=…` to filter by category. |
+| `GET` | `/kart/v1?userId=…` | JWT; user or admin role | Required `userId` | Get the user's cart. |
+| `PUT` | `/kart/v1/addproducts` | JWT; user or admin role | `{"userId":"…","products":["product-id"]}` | Add products to a cart. |
+| `DELETE` | `/kart/v1/delete?userId=…&productId=…` | JWT; user or admin role | Required `userId` and `productId` | Remove a product from a cart. |
+
+### Orders and payments
+
+| Method | Endpoint | Access | Parameters/body | Purpose |
+|---|---|---|---|---|
+| `GET` | `/order/v1/getAll?mode=…` | JWT-protected route | Required `mode`; optional `userId`, `orderDate` (`YYYY-MM-DD`), `paymentStatus`, `orderStatus` | Retrieve orders, optionally filtered. Modes: `NONE`, `ORDER_DATE`, `PAYMENT_STATUS`, `ORDER_STATUS`, `USER_ID`. |
+| `GET` | `/order/v1/getOrders?mode=…` | JWT-protected route | Same query parameters as `getAll` | Retrieve order records in the list response format. |
+| `GET` | `/order/v1/get?mode=…` | JWT-protected route | Required `mode`; optional `orderId`, `transactionId` | Retrieve one order. Modes: `ORDER_ID`, `TRANSACTION_ID`. |
+| `PUT` | `/payment/v1/products` | JWT; user or admin role | `{"userId":"…","paymentMode":"WALLET"}` | Purchase all products in the user's cart. |
+| `PUT` | `/payment/v1/buysomeproducts` | JWT; user or admin role | `{"userId":"…","paymentMode":"WALLET","products":["product-id"]}` | Purchase selected cart products. |
+| `GET` | `/payment/v1/getAll?mode=…` | JWT-protected route | Required `mode`; optional `userId`, `paymentStatus`, `paymentMode` | Retrieve payments. Modes: `NONE`, `USER_ID`, `PAYMENT_STATUS`, `PAYMENT_MODE`. |
+| `GET` | `/payment/v1/get?mode=…` | JWT-protected route | Required `mode`; optional `paymentId`, `orderId` | Retrieve one payment. Modes: `PAYMENT_ID`, `ORDER_ID`. |
+
+Supported payment modes are `PHONE_PAY`, `GOOGLE_PAY`, `PAYTM`, `DEBIT_CARD`, `CREDIT_CARD`, and `WALLET`. Payment status values include `SUCCESS`, `FAILURE`, and `PENDING`.
+
+### Wallet
+
+| Method | Endpoint | Parameters/body | Purpose |
+|---|---|---|---|
+| `GET` | `/wallet/v1?userId=…` | Required `userId` | Retrieve wallet details and balance. |
+| `PUT` | `/wallet/v1/addmoney` | `{"userId":"…","amount":100.0}` | Add funds to a user's wallet. |
+
+### Example: authenticate and call a protected endpoint
+
+```powershell
+$auth = Invoke-RestMethod -Method Post `
+  -Uri 'http://localhost:8080/auth/v1/authenticate' `
+  -ContentType 'application/json' `
+  -Body '{"username":"YOUR_USERNAME","password":"YOUR_PASSWORD"}'
+
+$headers = @{ Authorization = "Bearer $($auth.token)" }
+Invoke-RestMethod -Method Get `
+  -Uri 'http://localhost:8080/product/v1/all?mode=NONE' `
+  -Headers $headers
+```
+
+## Build and tests
+
+Build and run the backend tests with:
+
+```powershell
+.\mvnw.cmd clean install
+```
+
+The application-context test requires a reachable MySQL database with the expected schema. Build the Angular app with `npm run build` from `frontend/`.
+
+## Notes
+
+- Database credentials and the JWT signing secret belong only in the ignored local properties file.
+- `frontend/node_modules/`, Angular's `.angular/` cache, and generated `dist/` output are excluded from Git.
+- Endpoint behavior and required fields should be checked against the controllers and models as the API evolves; no database schema or migration scripts are currently included.
