@@ -14,7 +14,7 @@ export DB_URL='jdbc:mysql://localhost:3306/billa2024?allowPublicKeyRetrieval=tru
 export DB_USERNAME='root'
 export DB_PASSWORD='your-local-mysql-password'
 export JWT_SECRET="$(openssl rand -base64 32)"
-./mvnw spring-boot:run
+bash mvnw spring-boot:run
 ```
 
 On Windows PowerShell, set the same variables with `$env:DB_URL`, `$env:DB_USERNAME`, `$env:DB_PASSWORD`, and `$env:JWT_SECRET`, then run `.\mvnw.cmd spring-boot:run`.
