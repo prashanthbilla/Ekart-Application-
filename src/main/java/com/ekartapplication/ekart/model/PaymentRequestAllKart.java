@@ -1,0 +1,15 @@
+package com.ekartapplication.ekart.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+public class PaymentRequestAllKart {
+
+    private String userId;
+    private String paymentMode;
+
+}
