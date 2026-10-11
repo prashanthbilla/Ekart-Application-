@@ -18,6 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -106,6 +108,100 @@ class AuthEndpointsIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value(200))
                 .andExpect(jsonPath("$.data").value("Success"));
+    }
+
+    @Test
+    void createUserReturnsBadRequestForMissingRequiredFields() throws Exception {
+        mockMvc.perform(post("/user/v1/post")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"userName\":\"" + USERNAME + "\",\"password\":\"test-password\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("First name is required"));
+    }
+
+    @Test
+    void createUserReturnsBadRequestForBlankPassword() throws Exception {
+        mockMvc.perform(post("/user/v1/post")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"userName\":\"" + USERNAME + "\",\"password\":\" \"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Password is required"));
+    }
+
+    @Test
+    void createUserReturnsConflictForExistingUsername() throws Exception {
+        createUser();
+
+        mockMvc.perform(post("/user/v1/post")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(userJson()))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.message").value("Username is already taken"));
+    }
+
+    @Test
+    void userEndpointsReturnNotFoundForUnknownUsername() throws Exception {
+        createUser();
+        String token = jwtService.generateToken(USERNAME);
+        String updateBody = userJson().replace(USERNAME, "missing-user");
+
+        mockMvc.perform(get("/user/v1").param("userName", "missing-user")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(get("/user/v1/getRole").param("userName", "missing-user")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(put("/user/v1")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updateBody))
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(delete("/user/v1").param("userId", "missing-user")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void userGetListRoleUpdateAndDeleteEndpointsSucceed() throws Exception {
+        createUser();
+        String token = jwtService.generateToken(USERNAME);
+
+        mockMvc.perform(get("/user/v1").param("userName", USERNAME)
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0].userName").value(USERNAME));
+
+        mockMvc.perform(get("/user/v1/all")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0][0].userName").value(USERNAME));
+
+        mockMvc.perform(get("/user/v1/getRole").param("userName", USERNAME)
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").value("ROLE_USER"));
+
+        mockMvc.perform(put("/user/v1")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(userJson().replace("\"firstName\":\"Jane\"", "\"firstName\":\"Janet\"")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.userId").isNotEmpty());
+
+        mockMvc.perform(delete("/user/v1").param("userId", USERNAME)
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.message").value("Deleted..."));
+
+        assertEquals(0, jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM user_info WHERE user_name = ?", Integer.class, USERNAME));
+        assertEquals(0, jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM kart_info WHERE user_id = ?", Integer.class, USERNAME));
+        assertEquals(0, jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM wallet_info WHERE user_id = ?", Integer.class, USERNAME));
     }
 
     private void createUser() throws Exception {

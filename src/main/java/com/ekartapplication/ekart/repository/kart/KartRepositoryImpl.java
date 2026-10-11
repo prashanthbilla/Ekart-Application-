@@ -74,7 +74,7 @@ public class KartRepositoryImpl implements KartRepository {
 
     @Override
     public void deleteKartByUserId(String userName) {
-        String sql = "DELETE from kart_info where user_id = \"" + userName + "\"";
-        int response = template.update(sql);
+        String sql = "DELETE FROM kart_info WHERE user_id = ?";
+        template.update(sql, userName);
     }
 }

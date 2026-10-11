@@ -2,6 +2,7 @@ package com.ekartapplication.ekart.controllers;
 
 
 import com.ekartapplication.ekart.dao.UserDAO;
+import com.ekartapplication.ekart.exception.exceptions.InvalidUserDataException;
 import com.ekartapplication.ekart.model.SuccessResponse;
 import com.ekartapplication.ekart.model.User;
 import com.ekartapplication.ekart.service.user.UserService;
@@ -28,6 +29,9 @@ public class UserController {
 
     @PostMapping(value = "/post", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SuccessResponse> saveUser(@RequestBody User user) {
+        if (user == null || user.getPassword() == null || user.getPassword().isBlank()) {
+            throw new InvalidUserDataException("Password is required");
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         String userId = service.createUser(user);
         return new ResponseEntity<>(new SuccessResponse(HttpStatus.OK.value(), Collections.singletonMap("userId", userId)), HttpStatus.OK);

@@ -201,7 +201,7 @@ Run the user registration/authentication/message endpoint tests with the isolate
 .\mvnw.cmd "-Dtest=AuthControllerMockitoTest,AuthEndpointsIntegrationTest" test
 ```
 
-These tests cover user creation, password hashing and initial cart/wallet creation, successful JWT authentication, invalid-password rejection, and the public status endpoint. Mockito-based controller tests run alongside H2-backed Spring MVC integration tests. The existing full application-context test in the default suite uses the configured database, so it still needs a reachable MySQL database and the expected schema.
+These tests cover user creation, password hashing and initial cart/wallet creation, successful JWT authentication, invalid-password rejection, and the public status endpoint. `UserControllerTest` exercises each user-controller action and input rejection; H2-backed Spring MVC tests cover successful and not-found get/list/role/update/delete requests. `UserServiceImplTest` covers service validation and failure paths; `UserCreationRollbackIntegrationTest` verifies account creation rolls back if wallet or cart initialization fails.
 
 JaCoCo is configured to collect coverage during tests and generate an HTML report during `verify`. Run the full test suite and report generation with:
 
@@ -210,6 +210,8 @@ JaCoCo is configured to collect coverage during tests and generate an HTML repor
 ```
 
 Open `target/site/jacoco/index.html` in a browser to inspect line, branch, and class coverage. Coverage is informational; the build does not currently enforce a minimum percentage. Build the Angular app with `npm run build` from `frontend/`.
+
+User-service errors use consistent HTTP responses: invalid or incomplete input returns `400`, duplicate usernames return `409`, missing users return `404`, and persistence or dependent wallet/cart failures return a generic `500` with details logged server-side. User creation and deletion are transactional so failures do not leave orphaned account, cart, or wallet records. Repository database failures are translated by `@HandleRepoException`.
 
 ## Notes
 

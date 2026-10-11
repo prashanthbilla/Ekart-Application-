@@ -21,6 +21,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    @HandleRepoException
     public boolean saveUser(UserDAO user) {
         String sql = """
                 INSERT INTO user_info (
@@ -48,17 +49,20 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    @HandleRepoException
     public UserDAO getUserById(String userId) {
         return findUser("SELECT * FROM user_info WHERE user_name = ?", userId);
     }
 
     @Override
+    @HandleRepoException
     public int userCount(String userId) {
         String sql = "SELECT COUNT(*) FROM user_info WHERE user_name = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, userId);
     }
 
     @Override
+    @HandleRepoException
     public boolean updateUser(UserDAO user) {
         String sql = """
                 UPDATE user_info
@@ -93,18 +97,21 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    @HandleRepoException
     public boolean deleteUser(String userId) {
         String sql = "DELETE FROM user_info WHERE user_name = ?";
         return jdbcTemplate.update(sql, userId) == 1;
     }
 
     @Override
+    @HandleRepoException
     public int userNameCount(String userName) {
         String sql = "SELECT COUNT(*) FROM user_info WHERE user_name = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, userName);
     }
 
     @Override
+    @HandleRepoException
     public UserDAO getUserByUDANDPW(String username, String password) {
         String sql = "SELECT * FROM user_info WHERE user_name = ? AND paassword = ?";
         try {
@@ -115,6 +122,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    @HandleRepoException
     public UserDAO getUserByUserName(String userName) {
         return findUser("SELECT * FROM user_info WHERE user_name = ?", userName);
     }

@@ -69,7 +69,7 @@ public class WalletRepositoryImpl implements WalletRepository {
 
     @Override
     public void deleteKartByUserId(String userName) {
-        String sql = "DELETE from wallet_info where user_id = \"" + userName + "\"";
-        int response = template.update(sql);
+        String sql = "DELETE FROM wallet_info WHERE user_id = ?";
+        template.update(sql, userName);
     }
 }
